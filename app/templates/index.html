@@ -1,20 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    {% if title %}
-    <title>{{ title }}</title>
-    {% else %}
-    <title>Pitches</title>
-</head>
-<body>
+{% extends 'base.html'%}
+{% import 'macros.html' as macro%}
 
-    <div class = "container-fluid">
-        <div class = "jumbotron">
-            <h1><em>The Pitches</em></h1>    
-         </div>
-         </div>   
-</body>
-</html>
+<!-- Styles block -->
+
+{% block styles%}
+    {{ super() }}
+    <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div class="container">
+    <h1 style="text-align: center" class="title">Pitcher</h1>
+    <h3>say something meaningful?</h3>
+    <h2>Get started:</h2>
+    <ol>
+        <li><h4>Sign up and login to access content</h4></li>
+        <li><h4>Receive a welcoming email once you sign up</h4></li>
+    </ol>
+    </div>
+</div>
+<div class="container">
+    {% if pitches %}
+    {% for item in pitches %}
+    <div class="card">
+        <div class="card-header">
+            <p>{{ item.title }}</p>
+            <p>{{ item.category }}</p>
+        </div>
+        <div class="card-body">
+            <p>{{ item.pitch_statement }}</p>
+        </div>
+        <div class="card-footer">
+            <h4>comments</h4>
+            <div class="container">
+                {% if zee %}
+                {% for zenus in zee.reviews.all() %}
+                    <div class="card">
+                        <div class="card-body">
+                            {{ zenus.pitch_title }}
+                        </div>
+                    </div>
+                {% endfor%}
+                {% else %}
+                <p>No comments at the moment</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h4>There are no pitches at the moment</h4>
+    <a href="/" class="btn btn-primary"></a>
+    {% endif %}
+</div>
+{% endblock %}
