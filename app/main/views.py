@@ -12,5 +12,5 @@ def index():
     View root page function that returns the index page and its data
     '''
 
-    title = "pitch"
+    title = "Pitch-project"
     return render_template('index.hmtl',title=title)
