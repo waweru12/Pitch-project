@@ -4,9 +4,9 @@ from flask_login import login_required, current_user
 from ..models import Review,User,Pitch
 from .forms import UpdateProfile,ReviewForm,PitchForm
 from ..import db,photos
-import markdown2
 
-main.route('/')
+
+@main.route('/')
 def index():
     '''
     View root page function that returns the index page 
