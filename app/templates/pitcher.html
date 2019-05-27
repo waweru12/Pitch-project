@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-d"> 
+                <h3 class="text-center">{{pitcher.name|upper}} PITCH</h3>
+                <hr>
+                {% if pitches %}
+                
+                {{ macro.displayPitches(pitches)}}
+                
+                {%else%}
+                <div class="well">
+                  <h4 style="padding:12%; text-align:center; font-size:40px">Sorry no pitch available</h4>
+                </div>
+                
+                
+                {% endif %}
+                <a class="btn btn-primary text-center text-danger" href="/category/pitch/new/{{pitch.id}}">Write a new Pitch</a>
+
+        </div>
+
+            <div class="col-md-6 card">
+                    <h3>{{ pitch.title }}</h3>
+                    <p class="overview"> {{ pitch.pitch_statement }}</p>
+                    <a class ="ratings" href="app/templates/new_pitch.html{{pitch.id}}">Write a new review</a>
+            </div>
+       
+    </div>
+</div>
+{% endblock %}
