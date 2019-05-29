@@ -4,6 +4,11 @@ from flask_login import UserMixin
 from . import login_manager
 from datetime import datetime
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+    
+
 
 class User(UserMixin,db.Model):
     __tablename__ = 'users'
@@ -13,8 +18,8 @@ class User(UserMixin,db.Model):
     bio = db.Column(db.String(255))
     profile_pic_path = db.Column(db.String())
     password_hash = db.Column(db.String(255))
-    pitcher = db.relationship("Pitch", backref= "user", lazy="dynamic")
-    reviews = db.relationship("Review", backref = "user", lazy = "dynamic")
+    pitcher = db.relationship("Pitch", backref= "pitches", lazy="dynamic")
+    comments = db.relationship("Review", backref = "reviews1", lazy = "dynamic")
 
     @property
     def password(self):
@@ -31,25 +36,21 @@ class User(UserMixin,db.Model):
         return f'User {self.username}'
     
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
-    
-
  
 
 class Pitch(db.Model):
+    """ List of pitches in each category """
     __tablename__ = 'pitches'
 
     id = db.Column(db.Integer, primary_key = True)
-    category = db.Column(db.String(255))
     title = db.Column(db.String(255))
-    posted = db.Column(db.DateTime,default=datetime.utcnow)
+    category_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    reviews = db.relationship("Review", backref = "pitch", lazy = "dynamic")
-    pitch_statement = db.Column(db.String())
+    comment_id = db.relationship("Comments", backref = "pitch", lazy = "dynamic")
+   
     
     def save_pitch(self):
+        ''' Save the pitches '''
         db.session.add(self)
         db.session.commit()
 
@@ -79,6 +80,54 @@ class Review(db.Model):
         
     @classmethod
     def get_reviews(cls, id):
-        reviews = Review.query.filter_by(pitch_id = id).all()
-        return reviews
+        reviews_data = Review.query.filter_by(pitch_id = id).all()
+        return reviews_data
 
+
+class Comments(db.Model):
+    '''User comment model for each pitch '''
+
+    __tablename__ = 'comments'
+
+    # add columns
+    id = db.Column(db. Integer, primary_key=True)
+    opinion = db.Column(db.String(255))
+    time_posted = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    pitches_id = db.Column(db.Integer, db.ForeignKey("pitches.id"))
+
+
+    def save_comment(self):
+        '''
+        Save the Comments/comments per pitch
+        '''
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_comments(self, id):
+        comment = Comments.query.order_by(
+            Comments.time_posted.desc()).filter_by(pitches_id=id).all()
+        return comment
+
+class PitchCategory(db.Model):
+
+    __tablename__ = 'categories'
+
+    # table columns
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    description = db.Column(db.String(255))
+
+    # save pitches
+    def save_category(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def get_categories(cls):
+        categories = PitchCategory.query.all()
+        return categories
+
+
+        

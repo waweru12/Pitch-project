@@ -1,23 +1,15 @@
 {% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+ {%block styles%}
+  {{ super() }}
+
+{%endblock%}
 
 {% block content %}
-<div class="container">
-  <div class="row">
-   
-    <div class="col-md-4">
-        {{wtf.quick_form(PitchForm)}}
-      
-  
-      </div>
-    
-  
-     
-    </div>
-    
-
-    
-  {% import "bootstrap/wtf.html" as wtf %}
-
-  
+<div class="container col-md-6" style="text-align:center">
+  <div class="well">
+    <hr>
+    {{wtf.quick_form(PitchForm)}}
+ </div>
 </div>
 {% endblock %}

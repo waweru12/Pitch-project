@@ -1,8 +1,8 @@
 from flask import render_template,redirect,url_for,abort
 from . import main
 from flask_login import login_required, current_user
-from ..models import Review,User,Pitch
-from .forms import UpdateProfile,ReviewForm,PitchForm
+from ..models import Review,User,Pitch,PitchCategory,Comments
+from .forms import UpdateProfile,ReviewForm,PitchForm,CategoryForm,CommentForm
 from ..import db,photos
 
 
@@ -22,7 +22,7 @@ def index():
 @main.route('/user/<uname>')
 def profile(uname):
     user = User.query.filter_by(username = uname).first()
-    pitcher = Pitch.query.filter_by(user_id = user.id).order_by(Pitch.posted.desc())
+ 
 
     if user is None:
         abort(404)
@@ -59,31 +59,32 @@ def update_pic(uname):
         db.session.commit()
     return redirect(url_for('main.profile',uname=uname))
 
-@main.route('/user/<uname>/pitch',methods= ['GET','POST'])
+@main.route('/pitch/new',methods= ['GET','POST'])
 @login_required
-def new_pitch(uname):
+def new_pitch():
     '''
     Function to check Pitches form
     '''
-    user = User.query.filter_by(username = uname).first()
-    if user is None:
-        abort(404)
+    # user = User.query.filter_by(username = uname).first()
+    # if user is None:
+    #     abort(404)
 
     form = PitchForm()
     pitch = Pitch()
 
     if form.validate_on_submit():
-        pitch.category = form.category.data
-        pitch.title = form.title.data
-        pitch.pitch_statement = form.pitch.data
-        pitch.user_id = current_user.id
+        # pitch.category = form.category.data
+        # pitch.title = form.title.data
+        title = form.pitch.data
+        id = form.category_id.data
+        new_pitch= Pitch(title = title, id =id)
 
-        db.session.add(pitch)
+        db.session.add(new_pitch)
         db.session.commit()
 
-        return redirect(url_for('.profile',uname=user.username))
+        return redirect(url_for('.index'))
 
-    return render_template('new_pitch.html',uname=uname, user = user, PitchForm = form)
+    return render_template('new_pitch.html', PitchForm = form)
 
 @main.route('/category/<int:id>')
 def pitcher(category):
@@ -121,3 +122,43 @@ def new_review(pitch_id):
         return redirect(url_for('main.reviews', pitch_id=pitch.id ))
 
     return render_template('new_review.html', review_form = form)
+ 
+
+@main.route('/write_comment/<int:id>', methods=['GET', 'POST'])
+@login_required
+def post_comment(id):
+    ''' function to post comments '''
+    form = CommentForm()
+    title = 'post comment'
+    pitches = Pitch.query.filter_by(id=id).first()
+
+    if pitches is None:
+         abort(404)
+
+    if form.validate_on_submit():
+        opinion = form.opinion.data
+        new_comment = Comments(opinion=opinion, user_id=current_user.id, pitches_id=pitches.id)
+        new_comment.save_comment()
+        return redirect(url_for('main.index', id=pitches.id))
+
+    return render_template('post_comment.html', comment_form=form, title=title)
+
+
+@main.route('/add/category', methods=['GET','POST'])
+@login_required
+def new_category():
+    '''
+    View new group route function that returns a page with a form to create a category
+    '''
+    form = CategoryForm()
+    pitch = Pitch.query.all()
+
+    if form.validate_on_submit():
+        name = form.pitch.data
+        new_category = PitchCategory(name=name)
+        new_category.save_category()
+
+        return redirect(url_for('main.index'))
+
+    title = 'New category'
+    return render_template('new_category.html', category_form = form, title = title, pitches = pitch )

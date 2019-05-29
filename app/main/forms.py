@@ -8,12 +8,36 @@ class ReviewForm(FlaskForm):
     review = TextAreaField('Pitch review')
     submit = SubmitField('Submit')
 
+
 class PitchForm(FlaskForm):
-    category = SelectField('Category', choices=[('', ''), ('pickup lines', 'Pickup Lines'), ('technology', 'Technology Pitches'), ('product', 'Product Pitches'), ('family', 'Family Pitches'), ('jokes', 'Jokes Pitches'), ('motivational', 'Motivational Pitches'), ('educational', 'Educational Pitches')], validators = [Required()])
-    title = StringField('Pitch title', validators = [Required()])
-    pitch = TextAreaField('Pitch', validators = [Required()])
-    submit = SubmitField('Submit')
+    '''
+    Class to create a wtf form for creating a pitch
+    '''
+    category_id=SelectField("Select Category :", choices=[('c','select'),('1','Artifitial Intelegence'),('2','Robotics'),('3','Drones'),('4','IoT'),('5','Data Science')])
+    pitch=TextAreaField(" Post your pitch",validators=[Required()])
+    submit=SubmitField("Add your pitch ")
+
 
 class UpdateProfile(FlaskForm):
     bio = TextAreaField('Tell us about you.', validators = [Required()])
     submit = SubmitField('Submit')
+
+class CommentForm(FlaskForm):
+    '''
+    Class to create a wtf form for creating a pitch
+    '''
+    opinion = TextAreaField('WRITE COMMENT')
+    submit = SubmitField('SUBMIT')
+
+class DisplayPitch(FlaskForm):
+    text = TextAreaField('Type in your pitch', validators=[Required()])
+    categories = SelectField('Select your preffered category', choices=[('HUMOR', 'HUMOR'), ('BUSINESS', 'BUSINESS'), ('INSPIRATIONAL', 'INSPIRATIONAL'), ('SPIRITUAL', 'SPIRITUAL')])
+    submit = SubmitField('post')
+
+class CategoryForm(FlaskForm):
+    '''
+    Class to create a wtf form for creating a pitch
+    '''
+    category_id=SelectField("Select Category :", choices=[('c','select'),('1','Artifitial Intelegence'),('2','Robotics'),('3','Drones'),('4','IoT'),('5','Data Science')])
+    pitch=TextAreaField(" Post your pitch",validators=[Required()])
+    submit=SubmitField("Add your pitch ")
