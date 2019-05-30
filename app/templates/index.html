@@ -18,12 +18,13 @@
     <div class="container">
         <div class="row" style="margin-top:30px">
             {% if current_user.is_authenticated%}
-            <h1><u>Hello {{current_user.username}}</u></h1>
+            <h1 style="font-family: 'Sriracha', cursive;"><u>Hello {{current_user.username}}</u></h1>
             {% else %}
             <div class="text-white text-center py-5 px-4 my-5">
                 <div>
-                    <h2 class="card-title h1-responsive pt-3 mb-5 font-bold" style="font-family: 'Pacifico', cursive;">
-                        <strong> Pitches </strong></h2>
+                    <h2 class="card-title h1-responsive pt-3 mb-5 font-bold" style="font-family: 'Pacifico', cursive; font-size: 100px; color: cornsilk">
+                        <strong> The<br> pitches </strong></h2>
+                      
 
                     {%endif%}
                     {%if current_user.is_authenticated%}
