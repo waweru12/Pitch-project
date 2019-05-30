@@ -1,8 +1,8 @@
-"""initial
+"""empty message
 
-Revision ID: 280456a12a02
+Revision ID: 1462a511a733
 Revises: 
-Create Date: 2019-05-28 13:14:02.803345
+Create Date: 2019-05-30 16:11:23.335699
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '280456a12a02'
+revision = '1462a511a733'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,11 +36,10 @@ def upgrade():
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_table('pitches',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('category', sa.String(length=255), nullable=True),
     sa.Column('title', sa.String(length=255), nullable=True),
-    sa.Column('posted', sa.DateTime(), nullable=True),
+    sa.Column('category_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('pitch_statement', sa.String(), nullable=True),
+    sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
