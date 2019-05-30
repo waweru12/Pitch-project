@@ -1,39 +1,43 @@
 {% macro displayCategoryList(category_list) %}
-  {% for category in category_list%}
-        <div>
+{% for category in category_list%}
+<div>
 
-          <a href="{{url_for('.category',id=category.id)}}"><p>{{category.name|upper}}</p></a>
-        </div>
+  <a href="{{url_for('.category',id=category.id)}}">
+    <p>{{category.name|upper}}</p>
+  </a>
+</div>
 
-    {% endfor %}
+{% endfor %}
 {% endmacro %}
 
 {% macro displayPitches(pitch_list) %}
-  {% for pitches in pitch_list %}
+{% for pitches in pitch_list %}
+<div class="container">
   <div class="col-md-12">
-    <div class="well">
-      <div class="row">
-        <!-- <p>{{pitches.name|upper}}</p></a> -->
-        <div class="col-md-10 col-sm-12">
-            <h3>{{pitches.title}}</h3>
-              <a href=" {{url_for('.new_pitch',id=pitches.id)}}"><button class="btn btn-success">Read Comments</button></a>
+    <div class="row">
+      <!-- <p>{{pitches.name|upper}}</p></a> -->
+      <div class="col-md-10 col-sm-12">
+        <h3 style="color: blue">{{pitches.title}}</h3>
+        
 
-            <a href=" {{url_for('.post_comment',id=pitches.id)}}"> <button class="btn btn-danger">Add COMMENT</button></a>
-        </div>
-        </div>
-    </HISTORY> ..
+        <a href=" {{url_for('.post_comment',id=pitches.id)}}"> <button class="btn btn-danger">Add COMMENT</button></a>
+      </div>
+    </div>
+  
+  </HISTORY> ..
 
+  {% endfor %}
+  {% endmacro %}
+
+
+  {% macro displaySpecificPitch(specific_pitch_list) %}
+  {% for comment in specific_pitch_list %}
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 "></div>
+    <hr>
+    <p style="color:black; font-size: 25px;">{{comment.opinion}} </p>
+    <p style="text-align:right; color:#555652; font-size:10px;">{{comment.time_posted.strftime('%Y/%m/%d || %r') }}</p>
   </div>
   {% endfor %}
-{% endmacro %}
+  {% endmacro %}
 
-
-{% macro displaySpecificPitch(specific_pitch_list) %}
- {% for comment in specific_pitch_list %}
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-        <hr>
-        <p style="color:black; font-size: 25px;">{{comment.opinion}} </p>
-         <p style="text-align:right; color:#555652; font-size:10px;">{{comment.time_posted.strftime('%Y/%m/%d || %r') }}</p>
-    </div>
-  {% endfor %}
-{% endmacro %}
+</div>

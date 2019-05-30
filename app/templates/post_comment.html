@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
- {% import 'bootstrap/wtf.html' as wtf %}
-  {%block styles%}
-   {{ super() }}
+{% import 'bootstrap/wtf.html' as wtf %}
+{%block styles%}
+{{ super() }}
 {%endblock%}
 
 {% block content %}
 <div class="container">
+  {% for comment in comments %}
+  <div style="font-family: 'Caveat', cursive; font-size: ">
+    {{comment.opinion}}
+    {{comment.time_posted}}
+  </div>
+  {% endfor %}<br>
+
+
   {{wtf.quick_form(comment_form)}}
 </div>
 {% endblock %}

@@ -19,7 +19,7 @@ class User(UserMixin,db.Model):
     profile_pic_path = db.Column(db.String())
     password_hash = db.Column(db.String(255))
     pitcher = db.relationship("Pitch", backref= "pitches", lazy="dynamic")
-    comments = db.relationship("Review", backref = "reviews1", lazy = "dynamic")
+    comments = db.relationship("Review", backref = "reviews", lazy = "dynamic")
 
     @property
     def password(self):
@@ -44,7 +44,7 @@ class Pitch(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(255))
-    category_id = db.Column(db.Integer)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     comment_id = db.relationship("Comments", backref = "pitch", lazy = "dynamic")
    

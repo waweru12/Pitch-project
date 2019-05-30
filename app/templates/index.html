@@ -1,32 +1,46 @@
-{% extends 'base.html'%}
-{% import 'macros.html' as macro%}
+<html>
 
-{% block styles%}
+<head>
+    {% extends 'base.html'%}
+    {% import 'macros.html' as macro%}
+
+    {% block styles%}
     {{ super() }}
-{% endblock %}
-{% block content %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+    {% endblock %}
+    {% block content %}
+</head>
 
-     
+<body style="font-family: 'Russo One', sans-serif;background-image: url(https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832_960_720.jpg); 
+    background-repeat: no-repeat;
+    background-size: cover">
 
-     
-    <div class="container" style="font-family: 'Russo One', sans-serif">
-       
+    <div class="container">
+        <div class="row" style="margin-top:30px">
+            {% if current_user.is_authenticated%}
+            <h1><u>Hello {{current_user.username}}</u></h1>
+            {% else %}
+            <div class="text-white text-center py-5 px-4 my-5">
+                <div>
+                    <h2 class="card-title h1-responsive pt-3 mb-5 font-bold" style="font-family: 'Pacifico', cursive;">
+                        <strong> Pitches </strong></h2>
 
-      <div class="row" style="margin-top:30px">
-          {% if current_user.is_authenticated%}
-          <h1><u>Hello {{current_user.username}}</u></h1>
-        {% else %}
-          <h1><u>Hello stranger</u></h1>
-        {%endif%}
-        {%if current_user.is_authenticated%}
-        <h4 class="text-left"><a class="btn btn-success" href="{{url_for('main.new_pitch')}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add Category</a></h4>
-        {% endif %}
-          {{ macro.displayCategoryList(categories) }}
+                    {%endif%}
+                    {%if current_user.is_authenticated%}
+                    <h4 class="text-left"><a class="btn btn-success" href="{{url_for('main.new_pitch')}}"><span
+                                aria-hidden="true"></span>Add Pitch</a></h4>
+                    {% endif %}
+                    {{ macro.displayCategoryList(categories) }}
+                </div>
+            </div>
         </div>
-        {{ macro.displayPitches(pitches) }}
-<!-- {% endblock %} -->
+    </div>
+    
+    {{ macro.displayPitches(pitches) }}
+    
 
-</div>
- 
- 
- </style>
+    </div>
+    {%endblock%}
+</body>
+
+</html>

@@ -5,25 +5,22 @@ from ..models import Review,User,Pitch,PitchCategory,Comments
 from .forms import UpdateProfile,ReviewForm,PitchForm,CategoryForm,CommentForm
 from ..import db,photos
 
-
 @main.route('/')
 def index():
     '''
     View root page function that returns the index page 
     '''
-
-    #Getting popular movi
+    
     title = 'Home - Pitch'
     allPitches = Pitch.query.all()
     zee =  Review.query.all()
-
+    
     return render_template( 'index.html', title = title, pitches = allPitches, zee = zee )
 
 @main.route('/user/<uname>')
 def profile(uname):
     user = User.query.filter_by(username = uname).first()
- 
-
+    
     if user is None:
         abort(404)
 
@@ -71,20 +68,20 @@ def new_pitch():
 
     form = PitchForm()
     pitch = Pitch()
-
+    
     if form.validate_on_submit():
         # pitch.category = form.category.data
         # pitch.title = form.title.data
         title = form.pitch.data
         id = form.category_id.data
-        new_pitch= Pitch(title = title, id =id)
+        newpitch = Pitch(title = title, id = id)
 
-        db.session.add(new_pitch)
+        db.session.add(newpitch)
         db.session.commit()
 
-        return redirect(url_for('.index'))
+        return redirect(url_for('main.index'))
 
-    return render_template('new_pitch.html', PitchForm = form)
+    return render_template('new_pitch.html', Pitch_Form = form )
 
 @main.route('/category/<int:id>')
 def pitcher(category):
@@ -109,6 +106,7 @@ def new_review(pitch_id):
     form = ReviewForm()
     pitch = Pitch.query.filter_by(id = pitch_id).first()
     review = Review()
+    
 
     if form.validate_on_submit():
         review.pitch_review_title = form.title.data
@@ -131,7 +129,7 @@ def post_comment(id):
     form = CommentForm()
     title = 'post comment'
     pitches = Pitch.query.filter_by(id=id).first()
-
+    comments = Comments.query.filter_by().all()
     if pitches is None:
          abort(404)
 
@@ -140,8 +138,8 @@ def post_comment(id):
         new_comment = Comments(opinion=opinion, user_id=current_user.id, pitches_id=pitches.id)
         new_comment.save_comment()
         return redirect(url_for('main.index', id=pitches.id))
-
-    return render_template('post_comment.html', comment_form=form, title=title)
+    
+    return render_template('post_comment.html', comment_form=form, title=title ,comments=comments)
 
 
 @main.route('/add/category', methods=['GET','POST'])
