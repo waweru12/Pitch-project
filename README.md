@@ -1,5 +1,5 @@
-# One Minute Pitch
-#### This is an online news platform where a user can write his own pitches, read pitches from other users, vote for and review pitches as well as maintain their own profiles, 2019.
+# Pitch
+#### This is an online news platform where a user can write his own pitches, read pitches from other users, vote for and review pitches as well as maintain their own profiles.
 #### By **AUSTIN WAWERU**
 
 ## Description
